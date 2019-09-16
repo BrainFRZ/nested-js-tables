@@ -1,0 +1,131 @@
+{
+    "00100": [
+        {
+            "Name": "01101",
+            "Family": "01000",
+            "Weight": "13.5oz",
+            "Color": "Red"
+        },
+
+        {
+            "Name": "02101",
+            "Family": "02000",
+            "Weight": "4oz",
+            "Color": "Yellow"
+        },
+
+        {
+            "Name": "03101",
+            "Family": "03000",
+            "Weight": "13.5oz",
+            "Color": "Orange"
+        },
+
+        {
+            "Name": "04101",
+            "Family": "04000",
+            "Weight": "0.2oz",
+            "Color": "Purple"
+        }
+    ],
+
+    "01000": [
+        {
+            "Name": "01101",
+            "Category": "00100"
+        },
+
+        {
+            "Name": "01102",
+            "Category": "00100"
+        },
+
+        {
+            "Name": "01201",
+            "Category": "00200"
+        },
+
+        {
+            "Name": "01202",
+            "Category": "00200"
+        }
+    ],
+
+    "00200": [
+        {
+            "Name": "01201",
+            "Family": "01000",
+            "Height": "7m"
+        },
+
+        {
+            "Name": "01202",
+            "Family": "01000",
+            "Height": "15m"
+        },
+
+        {
+            "Name": "05201",
+            "Family": "05000",
+            "Height": "3m"
+        },
+
+        {
+            "Name": "06201",
+            "Family": "06000",
+            "Height": "2m"
+        }
+    ],
+
+    "03101": [
+        {
+            "Name": "031010",
+            "Tree Height": "7.6m",
+            "Weight": "3oz"
+        },
+
+        {
+            "Name": "031011",
+            "Tree Height": "5.5m",
+            "Weight": "2.8oz"
+        },
+
+        {
+            "Name": "031012",
+            "Tree Height": "2.4m",
+            "Weight": "2.5oz"
+        },
+
+        {
+            "Name": "031013",
+            "Tree Height": "10m",
+            "Weight": "4.9oz"
+        }
+    ],
+
+
+
+    "tags": {
+        "00100": "Fruit",
+        "00200": "Shrub",
+        "01000": "Rosaceae",
+        "01101": "Apple",
+        "01102": "Pear",
+        "01201": "Rose",
+        "01202": "Rowan",
+        "02000": "Musa",
+        "02101": "Banana",
+        "03000": "Citrus",
+        "03101": "Orange",
+            "031010": "Mandarin",
+            "031011": "Tangerine",
+            "031012": "Clementine",
+            "031013": "Navel Orange",
+        "04000": "Vitis",
+        "04101": "Grape",
+        "05000": "Holly",
+        "05201": "Winterberry",
+        "06000": "Vaccinium",
+        "06201": "Cranberry"
+    }
+}
