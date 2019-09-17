@@ -1,7 +1,10 @@
-<h1>To run locally, you must open the <samp>src</samp> directory and run <code>npm i reactjs-mappletooltip --save</code> in order for the tooltips to work properly. Fonts have been included in binary.</h1>
+# Instructions for local use
 
-Tooltip credits go to <a href="https://www.npmjs.com/package/reactjs-mappletooltip">haldarmahesh</a>.
-Font credits go to <a href="https://www.colorlib.com/>colorlib</a>.
+To run locally, you must open the <samp>src</samp> directory and run <code>npm i reactjs-mappletooltip --save</code> in order for the tooltips to work properly. Fonts have been included in ttf binary blob files, which may interfere with file transfer security measures.
+
+# Credits
+Tooltip credits go to [haldarmahesh](https://www.npmjs.com/package/reactjs-mappletooltip).
+Font credits go to [colorlib](https://www.colorlib.com).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
