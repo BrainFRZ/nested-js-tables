@@ -73,7 +73,6 @@ class Doc extends React.Component {
     this.setState({
       history: history,
       activeStep: activeStep,
-      latestStep: activeStep,
     });
 
     this.updateStep(stepNumber);
@@ -98,7 +97,8 @@ class Doc extends React.Component {
     }
 
     const activeStep = this.state.activeStep;
-    console.log(`Doc: activeStep ${activeStep} latestStep ${this.state.latestStep}`);
+    const latestStep = Object.keys(this.state.history).length-1;
+    console.log(`Doc: activeStep ${activeStep} latestStep ${latestStep}`);
     const stepTables = this.state.history['step'+activeStep];
     console.log(JSON.stringify(stepTables));
     return (
@@ -106,7 +106,7 @@ class Doc extends React.Component {
         <StepperMenu
           key={`menu${activeStep}`}
           activeStep={activeStep}
-          latestStep={this.state.latestStep}
+          latestStep={latestStep}
           onUpdate={this.updateStep}
         />
         <NestedTables key={`tables${activeStep}`} tables={stepTables} addTable={this.addTable} />
@@ -217,7 +217,7 @@ class StepperMenu extends React.Component {
         </button>
 
         <input className='stepInput' value={this.state.inputVal}
-          onChange={(e) => this.handleInput(e)}  onBlur={(e) => this.handleInputBlur(e)}  onkeypress={(e) => this.handleKeyPress(e)}
+          onChange={(e) => this.handleInput(e)}  onBlur={(e) => this.handleInputBlur(e)}  onKeyPress={(e) => this.handleKeyPress(e)}
         />
 
         <button className='step-button' id='next' type='button'
