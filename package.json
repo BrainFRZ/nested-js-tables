@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "react": "^16.9.0",
+    "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
     "reactjs-mappletooltip": "file:mapple-tooltip.tar"
@@ -29,5 +31,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage" : "http://www.greymud.com/harp/nested-tables"
+  "homepage": "http://www.greymud.com/harp/nested-tables"
 }

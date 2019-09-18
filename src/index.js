@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Plants from './data/plants.json';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import './index.css';
 
 const STARTING_TABLE_TAG = '00100'; /* Fruit table tag */
@@ -32,7 +35,6 @@ class Doc extends React.Component {
   };
 
   updateStep(step) {
-    console.log(`step updated to ${step}`);
     const activeStep = step;
     const latestStep = this.state.latestStep;
     this.setState({
@@ -55,18 +57,11 @@ class Doc extends React.Component {
 
     const activeStep = this.state.activeStep;
     const stepNumber = activeStep + 1;
-    console.log(`step ${activeStep}`)
     const history = this.sliceHistory(0, stepNumber + 1); /* Delete the future history making new tables while rewound */
     
-    if (activeStep < this.state.latestStep) {
-      console.log('slicing history to step ' + activeStep);
-    }
-
     const newStep = history['step'+activeStep].slice(0, clickedTableIndex + 1);
     newStep.push(titleTag);
-    console.log(`Set step${stepNumber} to ${newStep}`)
     history['step'+stepNumber] = newStep;
-    console.log(history);
 
     this.setState({
       history: history,
@@ -95,9 +90,7 @@ class Doc extends React.Component {
 
     const activeStep = this.state.activeStep;
     const latestStep = Object.keys(this.state.history).length-1;
-    console.log(`Doc: activeStep ${activeStep} latestStep ${latestStep}`);
     const stepTables = this.state.history['step'+activeStep];
-    console.log(JSON.stringify(stepTables));
     return (
       <div>
         <StepperMenu
@@ -172,7 +165,6 @@ class StepperMenu extends React.Component {
 
   handleKeyPress = (event) => {
     if(event.key === 'Enter'){
-      console.log(event.key);
       this.handleInputBlur(event);
     }
   }
@@ -195,42 +187,40 @@ class StepperMenu extends React.Component {
     const nextMsg  = `Step ${(nextStep > latestStep) ? latestStep + 1 : nextStep + 1}  >`;
     const lastMsg  = `Step ${lastStep + 1}  >>`;
 
-    console.log(`Stepper sees step ${activeStep}`);
-
     return (
-      <form id='stepper-menu'>
-        <button className='step-button' id='first' type='button'
+      <ButtonToolbar id='stepper-menu'>
+        <Button className='step-button' variant='secondary' id='first' type='button'
           disabled={activeStep <= firstStep}
           onClick={this.handleClick}
         >
           {firstMsg}
-        </button>
+        </Button>
 
-        <button className='step-button' id='prev' type='button'
+        <Button className='step-button' variant='primary' id='prev' type='button'
           disabled={activeStep <= firstStep}
           onClick={this.handleClick}
         >
           {prevMsg}
-        </button>
+        </Button>
 
-        <input className='stepInput' value={this.state.inputVal}
+        <input id='step-input' value={this.state.inputVal}
           onChange={(e) => this.handleInput(e)}  onBlur={(e) => this.handleInputBlur(e)}  onKeyPress={(e) => this.handleKeyPress(e)}
         />
 
-        <button className='step-button' id='next' type='button'
+        <Button className='step-button' variant='primary' id='next' type='button'
           disabled={activeStep >= lastStep}
           onClick={this.handleClick}
         >
           {nextMsg}
-        </button>
+        </Button>
 
-        <button className='step-button' id='last' type='button'
+        <Button className='step-button' variant='secondary' id='last' type='button'
           disabled={activeStep >= lastStep}
           onClick={this.handleClick}
         >
           {lastMsg}
-        </button>
-      </form>
+        </Button>
+      </ButtonToolbar>
     );
   };
 }
@@ -270,13 +260,10 @@ class NestedTables extends React.Component {
       return null;
     }
 
-    console.log(this.state.tablesTags);
     const tables = this.state.tablesTags.map((tag) => Plants[tag]);
-    console.log(JSON.stringify(tables));
     const tableComponents = [];
     for (let t = 0; t < tables.length; t++) {
       const tag = this.state.tablesTags[t];
-      console.log(tag);
 
       tableComponents.push(
         <Table key={`${tag}t${t}`} tag={tag} index={t} handleClick={this.handleClick} />
@@ -285,7 +272,7 @@ class NestedTables extends React.Component {
 
 
     return (
-      <div key="tables">
+      <div class='centered' key="tables">
         { tableComponents }
       </div>
     );
@@ -301,7 +288,6 @@ function Table(props) {
   const rows = [];
   for (let r = 0; r < data.length; r++) {
     const row = heads.map(key => data[r][key]);
-    console.log(row);
     rows.push(<TableRow key={`${props.tag}r${r}`} index={props.index} row={r} data={row} handleClick={props.handleClick} />);
   };
 
