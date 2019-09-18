@@ -9,6 +9,11 @@
   src: url('./fonts/Poppins-Bold.ttf'); 
 }
 
+#stepper-menu {
+  margin: 10px auto;
+  justify-content: center;
+}
+
 .step-button {
   margin: 4px;
 }
@@ -22,11 +27,12 @@
 
 .result {
   font-family: Poppins-Regular;
-  margin: 20px;
+  margin: 20px auto;
   width: 75%;
   font-size: 1.15em;
   border:4px solid #000;
   border-collapse: collapse;
+  justify-content: center;
 }
 
 .result td {

@@ -272,7 +272,7 @@ class NestedTables extends React.Component {
 
 
     return (
-      <div class='centered' key="tables">
+      <div key="tables">
         { tableComponents }
       </div>
     );
