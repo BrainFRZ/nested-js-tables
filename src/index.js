@@ -12,7 +12,7 @@ class Doc extends React.Component {
     super(props);
 
     this.state = {
-      activeStep: 0, /* Start at -1 so first new step will be 0 */
+      activeStep: 0,
       latestStep: 0,
       history: {},
       loaded: false,
@@ -27,7 +27,7 @@ class Doc extends React.Component {
     document.title = "Nested Tables";
     this.setState({
       loaded: true,
-      history: {'step0': [{[STARTING_TABLE_TAG]: Plants[STARTING_TABLE_TAG]}]},
+      history: {'step0': [STARTING_TABLE_TAG]},
     });
   };
 
@@ -53,26 +53,23 @@ class Doc extends React.Component {
       return null;
     }
 
-    const stepNumber = this.state.activeStep + 1;
-    const json = Plants[titleTag];
     const activeStep = this.state.activeStep;
+    const stepNumber = activeStep + 1;
     console.log(`step ${activeStep}`)
-    const history = this.sliceHistory(0, activeStep + 1); /* Delete the future history making new tables while rewound */
+    const history = this.sliceHistory(0, stepNumber + 1); /* Delete the future history making new tables while rewound */
     
     if (activeStep < this.state.latestStep) {
       console.log('slicing history to step ' + activeStep);
     }
 
-    console.log(JSON.stringify(history));
     const newStep = history['step'+activeStep].slice(0, clickedTableIndex + 1);
-    newStep.push({[titleTag]: json});
-    console.log(`added ${JSON.stringify(newStep)}`);
+    newStep.push(titleTag);
+    console.log(`Set step${stepNumber} to ${newStep}`)
     history['step'+stepNumber] = newStep;
+    console.log(history);
 
-    console.log(`newHistory is ${JSON.stringify(history)}`);
     this.setState({
       history: history,
-      activeStep: activeStep,
     });
 
     this.updateStep(stepNumber);
@@ -81,7 +78,7 @@ class Doc extends React.Component {
   sliceHistory(start, end) {
     const history = this.state.history;
     start = start || 0;
-    end = end || history.length-1;
+    end = end || history.length - 1;
     const newHistory = {};
     Object.keys(history).slice(start, end).forEach((key) => {
       newHistory[key] = history[key];
@@ -109,7 +106,7 @@ class Doc extends React.Component {
           latestStep={latestStep}
           onUpdate={this.updateStep}
         />
-        <NestedTables key={`tables${activeStep}`} tables={stepTables} addTable={this.addTable} />
+        <NestedTables key={`tables${activeStep}`} tablesTags={stepTables} addTable={this.addTable} />
       </div>
     );
   };
@@ -245,9 +242,9 @@ class NestedTables extends React.Component {
     super(props);
 
     this.state = {
-      tables: props.tables,
-      tags: Plants.tags,
+      tablesTags: props.tablesTags,
       addTable: props.addTable,
+      loaded: false,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -273,29 +270,16 @@ class NestedTables extends React.Component {
       return null;
     }
 
-    const tables = this.state.tables;
-    console.log(tables);
-    const tableTagsList = tables.map((table) => Object.keys(table));
-    console.log(`tableTags: ${JSON.stringify(tableTagsList)}`);
+    console.log(this.state.tablesTags);
+    const tables = this.state.tablesTags.map((tag) => Plants[tag]);
+    console.log(JSON.stringify(tables));
     const tableComponents = [];
-    for (let t = 0; t < tableTagsList.length; t++) {
-      const tag = tableTagsList[t];
-      const table = tables[t];
+    for (let t = 0; t < tables.length; t++) {
+      const tag = this.state.tablesTags[t];
       console.log(tag);
-      const data = table[tag];
-      console.log(tables);
-      console.log(data);
-
-      const heads = Object.keys(data[0]);
-      const rows = [];
-      for (let r = 0; r < data.length; r++) {
-        const row = heads.map(key => data[r][key]);
-        rows.push(row);
-      }
 
       tableComponents.push(
-        <Table key={`${tag}t${t}`} tag={tag} index={t} heads={heads} rows={rows}
-          tags={this.state.tags} handleClick={this.handleClick} />
+        <Table key={`${tag}t${t}`} tag={tag} index={t} handleClick={this.handleClick} />
       );
     }
 
@@ -310,15 +294,21 @@ class NestedTables extends React.Component {
 
 
 function Table(props) {
-  const rows = props.rows.slice();
-  for (let r = 0; r < rows.length; r++) {
-    rows[r] = <TableRow key={`${props.tag}r${r}`} index={props.index} row={r} data={rows[r]} tags={props.tags} handleClick={props.handleClick} />
+  const data = Plants[props.tag].slice();
+
+  const heads = Object.keys(data[0]);
+
+  const rows = [];
+  for (let r = 0; r < data.length; r++) {
+    const row = heads.map(key => data[r][key]);
+    console.log(row);
+    rows.push(<TableRow key={`${props.tag}r${r}`} index={props.index} row={r} data={row} handleClick={props.handleClick} />);
   };
 
   return (
     <div>
       <table key={`table${props.tag}`} className='result'>
-        <TableHead key={`${props.tag}THD`} tag={props.tag} heads={props.heads} tags={props.tags} />
+        <TableHead key={`${props.tag}THD`} tag={props.tag} heads={heads} />
         <tbody key={`${props.tag}TB`}>{rows}</tbody>
       </table>
     </div>
@@ -326,19 +316,20 @@ function Table(props) {
 }
 
 function TableHead(props) {
-  const title = props.tags[props.tag] ? props.tags[props.tag] : props.tag;
+  const tag = props.tag;
+  const title = Plants.tags[props.tag] ? Plants.tags[props.tag] : props.tag;
   const width = props.heads.length;
 
   const titleRow = (
-    <tr key={`${props.tag}trt`}>
-      <th colSpan={width} className='table-title'>{`${title} (#${props.tag})`}</th>
+    <tr key={`${tag}trt`}>
+      <th colSpan={width} className='table-title'>{`${title} (#${tag})`}</th>
     </tr>
   );
 
   const heads = [];
   for (let h = 0; h < props.heads.length; h++) {
     heads.push(<th key={`${props.tag}trh${h}`}>{props.heads[h]}</th>);
-  }
+  };
 
   const headerRow = (
     <tr key={`${props.tag}trh`}>
@@ -359,8 +350,8 @@ function TableRow(props) {
   for (let c = 0; c < props.data.length; c++) {
     const cData = props.data[c];
     const cKey = `${props.tag}r${props.row}c${c}`;
-    if (props.tags[cData]) {
-      cells.push(<ClickableCell key={cKey} index={props.index} ckey={cKey} data={cData} tags={props.tags} handleClick={props.handleClick} />)
+    if (Plants.tags[cData]) {
+      cells.push(<ClickableCell key={cKey} index={props.index} cKey={cKey} data={cData} handleClick={props.handleClick} />)
     } else {
       cells.push(<td key={cKey}>{cData}</td>)
     }
@@ -373,10 +364,10 @@ function TableRow(props) {
 
 function ClickableCell(props) {
   const tag = props.data;
-  const cData = props.tags[tag];
+  const cData = Plants.tags[tag];
   return (
     <td
-      key={`${props.ckey}c`}
+      key={`${props.cKey}c`}
       onClick={() => props.handleClick(tag, props.index)}
       className={(tag in Plants) ? 'clickable' : 'broken-link'}
     >
